@@ -1,0 +1,236 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Series - StreamNest</title>
+    <style>
+    header {
+        background: #141414;
+        padding: 20px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+     }
+    .logo {
+        font-size: 2rem;
+        color: #ff385c;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+    a.logo {
+        text-decoration: none;
+        color: #ff385c;
+        font-size: 2rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+    } 
+    
+    nav a {
+        color: #f5f5f5;
+        margin-left: 30px;
+        text-decoration: none;
+        font-size: 1.1rem;
+        transition: color 0.2s;
+    }
+    nav a:hover {
+        color: #ff385c;
+    }
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+    
+    .username {
+        color: #f5f5f5;
+        font-size: 1.1rem;
+        margin-left: 30px;
+    }
+    .username:hover {
+        color: #ff385c;
+    }
+    
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: #23232b;
+        min-width: 120px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0,0,0,0.4);
+        z-index: 1;
+    }
+    
+    .dropdown-content a {
+        color: #f5f5f5;
+        padding: 10px 16px;
+        text-decoration: none;
+        display: block;
+        font-size: 1rem;
+    }
+    
+    .dropdown-content a:hover {
+        background-color: #ff385c;
+        color: #23232b;
+    }
+    
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    body {
+        background: url("{% static 'images/streamnest.jpg' %}") no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0px;
+    }
+
+    h1 {
+        margin-bottom: 30px;
+        color: #ff385c;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .series-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-left: 35px;
+        justify-content: center;
+    }
+
+    .card {
+        width: 220px;
+        background: #23232b;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        transition: transform 0.3s;
+        position: relative;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .poster {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        border-bottom: 2px solid #333;
+    }
+
+    .details {
+        padding: 12px;
+    }
+
+    .title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #fff;
+    }
+
+    .description {
+        font-size: 0.9rem;
+        color: #bbb;
+        margin-bottom: 10px;
+    }
+
+    .release {
+        font-size: 0.8rem;
+        color: #888;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        padding: 12px;
+        background: #1c1c22;
+        border-top: 1px solid #333;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .card:hover .actions {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .actions button {
+        background: #ff385c;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: white;
+        transition: background 0.2s;
+    }
+
+    .actions button:hover {
+        background: #b31539;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{% url 'home' %}" class="logo">StreamNest</a>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'movie_list' %}">Movies</a>
+            <a href="{% url 'series_list' %}">Series</a>
+            <a href="{% url "watchlist" %}">Watchlist</a>
+            <div class="dropdown">
+                <span class="username">{{ user.username }} ▾</span>
+                <div class="dropdown-content">
+                    <a href="{% url 'logout' %}">Sign Out</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <h1>SERIES</h1>
+
+<div class="series-grid">
+    {% for series in series %}
+        <div class="card">
+            {% if series.poster %}
+                <img src="{{ series.poster.url }}" alt="{{ series.title }}" class="poster">
+            {% else %}
+                <img src="https://via.placeholder.com/200x300.png?text=No+Poster" alt="No Poster" class="poster">
+            {% endif %}
+
+            <div class="details">
+                <div class="title">{{ series.title }}</div>
+                <div class="description">{{ series.description }}</div>
+                <div class="release"><b>Release:</b> {{ series.release_date }}</div>
+            </div>
+
+            <div class="actions">
+                <a href="{% url 'add_to_watchlist' 'series' series.id %}">
+                    <button title="Add to Watchlist">➕ Watchlist</button>
+                </a>
+                <button>▶ Play</button>
+            </div>
+        </div>
+    {% empty %}
+        <p>No series available.</p>
+    {% endfor %}
+</div>
+<script>
+    window.addEventListener("pageshow", function(event) {
+      if (event.persisted) {
+        window.location.href = "{% url 'login' %}";
+      }
+    });
+  </script>
+</body>
+</html>

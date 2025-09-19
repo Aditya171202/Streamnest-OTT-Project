@@ -1,0 +1,29 @@
+# Python compiled files
+__pycache__/
+*.pyc
+
+# Virtual environment
+env/
+.env
+
+# Django files
+db.sqlite3
+/staticfiles/
+media/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Ignore media files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.flv
+*.wmv
+*.mp3
+*.wav
+*.ogg
+*.webm
+

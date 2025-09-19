@@ -1,0 +1,219 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>StreamNest - Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Reset some default styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #181818; color: #f5f5f5; }
+
+        header {
+            background: #141414;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 2rem;
+            color: #ff385c;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        nav a {
+            color: #f5f5f5;
+            margin-left: 30px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+        nav a:hover {
+            color: #ff385c;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .username {
+            color: #f5f5f5;
+            font-size: 1.1rem;
+            margin-left: 30px;
+        }
+        .username:hover {
+            color: #ff385c;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #23232b;
+            min-width: 120px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.4);
+            z-index: 1;
+        }
+        
+        .dropdown-content a {
+            color: #f5f5f5;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 1rem;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #ff385c;
+            color: #23232b;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .hero {
+            background: linear-gradient(90deg, #181818 60%, #24243e 100%);
+            padding: 60px 40px 40px 40px;
+        }
+        .hero-content {
+            max-width: 700px;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+        }
+        .cta-button {
+            padding: 15px 35px;
+            background: #ff385c;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .cta-button:hover {
+            background: #b31539;
+        }
+
+        .section {
+            padding: 40px;
+            background: url("{% static 'images/streamnest.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+        }
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: #ff385c;
+        }
+        .content-row {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+        }
+        .card {
+            min-width: 220px;
+            background: #23232b;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card img {
+            width: 100%;
+            border-radius: 14px 14px 0 0;
+        }
+        .card-title {
+            padding: 16px;
+            font-size: 1.1rem;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;
+        }
+        @media (max-width: 700px) {
+            .hero, .section { padding: 20px; }
+            .hero h1 { font-size: 2rem; }
+            .content-row { flex-direction: column; }
+            header { flex-direction: column; gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <span class="logo">StreamNest</span>
+        <nav>
+            <a href="{% url "home" %}">Home</a>
+            <a href="{% url "movie_list" %}">Movies</a>
+            <a href="{% url "series_list" %}">Series</a>
+            <a href="{% url "watchlist" %}"> Watchlist</a>
+            <div class="dropdown">
+                <span class="username">{{ user.username }} ▾</span>
+                <div class="dropdown-content">
+                    <a href="{% url 'logout' %}">Sign Out</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to StreamNest</h1>
+            <p>Your home for blockbuster movies, trending series, and exclusive originals — anytime, anywhere. Start streaming now!</p>
+            <button class="cta-button">Start Watching</button>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-title">Featured</div>
+        <div class="content-row">
+            <div class="card">
+                <img src="https://via.placeholder.com/300x400.png?text=Featured+1" alt="Featured 1">
+                <div class="card-title">Featured Movie 1</div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/300x400.png?text=Featured+2" alt="Featured 2">
+                <div class="card-title">Featured Show 2</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-title">Trending Now</div>
+        <div class="content-row">
+            <div class="card">
+                <img src="https://via.placeholder.com/300x400.png?text=Trending+1" alt="Trending 1">
+                <div class="card-title">Trending Movie 1</div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/300x400.png?text=Trending+2" alt="Trending 2">
+                <div class="card-title">Trending Series 2</div>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/300x400.png?text=Trending+3" alt="Trending 3">
+                <div class="card-title">Trending Movie 3</div>
+            </div>
+        </div>
+    </section>
+    <script>
+        window.addEventListener("pageshow", function(event) {
+          if (event.persisted) {
+            window.location.href = "{% url 'login' %}";
+          }
+        });
+      </script>
+      
+</body>
+</html>
