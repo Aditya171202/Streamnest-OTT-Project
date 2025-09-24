@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'movies',
     'series',
     'watchlist',
-    'accounts' #test card number for stripe is 4242 4242 4242 4242 with any future date of expiry and any 3 digit number for cvv
+    'accounts', #test card number for stripe is 4242 4242 4242 4242 with any future date of expiry and any 3 digit number for cvv
+    'core'
 ]
 
 MIDDLEWARE = [

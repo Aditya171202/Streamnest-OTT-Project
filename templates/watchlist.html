@@ -172,11 +172,26 @@
         .actions button:hover {
             background: #b31539;
         }
+        .subscription-info {
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #00c853; 
+            font-weight: 500;
+            background: rgba(0, 200, 83, 0.1); 
+            border-radius: 6px;
+            margin: 6px 10px;
+            text-align: center;
+        }
+        
+        .subscription-info.expired {
+            color: #e53935; 
+            background: rgba(229, 57, 53, 0.1);
+        }
     </style>
 </head>
 <body>
     <header>
-        <a href="{% url 'home' %}" class="logo">StreamNest</a>
+        <span class="logo">StreamNest</span>
         <nav>
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'movie_list' %}">Movies</a>
@@ -185,6 +200,13 @@
             <div class="dropdown">
                 <span class="username">{{ user.username }} ▾</span>
                 <div class="dropdown-content">
+                    {% if subscription_end %}
+                        <p class="subscription-info">
+                            Valid till: <strong>{{ subscription_end|date:"M d, Y" }}</strong>
+                        </p>
+                    {% else %}
+                        <p class="subscription-info">No active subscription</p>
+                    {% endif %}
                     <a href="{% url 'logout' %}">Sign Out</a>
                 </div>
             </div>

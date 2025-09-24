@@ -6,7 +6,19 @@ from series.models import Series
 
 def watchlist(request):
     items = WatchlistItem.objects.filter(user=request.user)
-    return render(request, "watchlist.html", {"items": items})
+
+  
+    subscription_end = None
+    if request.user.is_authenticated and hasattr(request.user, 'profile'):
+        subscription_end = request.user.profile.subscription_end
+
+    context = {
+        "items": items,
+        "subscription_end": subscription_end, 
+    }
+
+    return render(request, "watchlist.html", context)
+
 
 
 def add_to_watchlist(request, content_type, pk):

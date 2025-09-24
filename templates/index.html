@@ -6,10 +6,16 @@
     <title>StreamNest - Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* Reset some default styles */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #181818; color: #f5f5f5; }
-
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #181818;
+            color: #f5f5f5;
+        }
         header {
             background: #141414;
             padding: 20px 40px;
@@ -38,7 +44,6 @@
             display: inline-block;
             cursor: pointer;
         }
-        
         .username {
             color: #f5f5f5;
             font-size: 1.1rem;
@@ -47,7 +52,6 @@
         .username:hover {
             color: #ff385c;
         }
-        
         .dropdown-content {
             display: none;
             position: absolute;
@@ -58,7 +62,6 @@
             box-shadow: 0px 4px 8px rgba(0,0,0,0.4);
             z-index: 1;
         }
-        
         .dropdown-content a {
             color: #f5f5f5;
             padding: 10px 16px;
@@ -66,16 +69,13 @@
             display: block;
             font-size: 1rem;
         }
-        
         .dropdown-content a:hover {
             background-color: #ff385c;
             color: #23232b;
         }
-        
         .dropdown:hover .dropdown-content {
             display: block;
         }
-
         .hero {
             background: linear-gradient(90deg, #181818 60%, #24243e 100%);
             padding: 60px 40px 40px 40px;
@@ -106,7 +106,6 @@
         .cta-button:hover {
             background: #b31539;
         }
-
         .section {
             padding: 40px;
             background: url("{% static 'images/streamnest.jpg' %}") no-repeat center center fixed;
@@ -119,35 +118,158 @@
         }
         .content-row {
             display: flex;
-            gap: 24px;
+            gap: 16px;
             overflow-x: auto;
         }
         .card {
-            min-width: 220px;
+            min-width: 160px;
+            max-width: 160px;
             background: #23232b;
-            border-radius: 14px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
             transition: transform 0.2s;
-        }
-        .card:hover {
-            transform: scale(1.05);
+            display: flex;
+            flex-direction: column;
+            position: relative;
         }
         .card img {
             width: 100%;
-            border-radius: 14px 14px 0 0;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
         }
-        .card-title {
-            padding: 16px;
-            font-size: 1.1rem;
-            color: #fff;
+        .details {
+            padding: 6px;
+            flex: 1;
+        }
+        .details .title {
+            font-size: 0.85rem;
             font-weight: bold;
             text-align: center;
+            margin-bottom: 2px;
+        }
+        .details .description {
+            font-size: 0.7rem;
+            text-align: center;
+            margin-bottom: 2px;
+        }
+        .details .release {
+            font-size: 0.65rem;
+            text-align: center;
+            color: #ccc;
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            padding: 6px 0;
+        }
+        .actions a button {
+            margin-bottom: 6px;
+            background: #ff385c;
+            border: none;
+            padding: 3px 6px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+        }
+        .actions a button:hover {
+            background: #b31539;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        }
+        .video-container {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 220px;
+            background: #000;
+            z-index: 2;
+        }
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-controls {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4px;
+        }
+        .video-controls button {
+            background: rgba(255,56,92,0.8);
+            border: none;
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 4px;
+            border-radius: 4px;
+            cursor: pointer;
         }
         @media (max-width: 700px) {
-            .hero, .section { padding: 20px; }
-            .hero h1 { font-size: 2rem; }
-            .content-row { flex-direction: column; }
-            header { flex-direction: column; gap: 16px; }
+            .hero, .section {
+                padding: 20px;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .content-row {
+                flex-direction: column;
+            }
+            header {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+        .genre-filter {
+            display: inline-block;
+            position: relative;
+            margin: 20px 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .genre-filter select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding: 8px 36px 8px 12px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #23232b url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 10px center;
+            background-size: 12px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .genre-filter select:hover {
+            border-color: #ff385c;
+        }
+        .genre-filter select:focus {
+            outline: none;
+            border-color: #ff385c;
+            box-shadow: 0 0 6px rgba(255, 56, 92, 0.5);
+        }
+        .subscription-info {
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #00c853;
+            font-weight: 500;
+            background: rgba(0, 200, 83, 0.1);
+            border-radius: 6px;
+            margin: 6px 10px;
+            text-align: center;
+        }
+        .subscription-info.expired {
+            color: #e53935;
+            background: rgba(229, 57, 53, 0.1);
         }
     </style>
 </head>
@@ -155,13 +277,29 @@
     <header>
         <span class="logo">StreamNest</span>
         <nav>
-            <a href="{% url "home" %}">Home</a>
-            <a href="{% url "movie_list" %}">Movies</a>
-            <a href="{% url "series_list" %}">Series</a>
-            <a href="{% url "watchlist" %}"> Watchlist</a>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'movie_list' %}">Movies</a>
+            <a href="{% url 'series_list' %}">Series</a>
+            <a href="{% url 'watchlist' %}">Watchlist</a>
+            <form method="get" action="{% url 'search' %}" style="display:inline-block; margin-left:30px;">
+                <input type="text" name="q" placeholder="Search..." 
+                       value="{{ request.GET.q|default:'' }}"
+                       style="padding:6px 10px; border-radius:6px; border:none; outline:none;">
+                <button type="submit" 
+                        style="padding:6px 12px; background:#ff385c; color:white; border:none; border-radius:6px; cursor:pointer;">
+                    Search
+                </button>
+            </form>
             <div class="dropdown">
                 <span class="username">{{ user.username }} ▾</span>
                 <div class="dropdown-content">
+                    {% if subscription_end %}
+                        <p class="subscription-info">
+                            Valid till: <strong>{{ subscription_end|date:"M d, Y" }}</strong>
+                        </p>
+                    {% else %}
+                        <p class="subscription-info">No active subscription</p>
+                    {% endif %}
                     <a href="{% url 'logout' %}">Sign Out</a>
                 </div>
             </div>
@@ -176,44 +314,146 @@
         </div>
     </section>
 
+    <!-- Coming Soon Section -->
     <section class="section">
-        <div class="section-title">Featured</div>
+        <div class="section-title">Coming Soon</div>
         <div class="content-row">
-            <div class="card">
-                <img src="https://via.placeholder.com/300x400.png?text=Featured+1" alt="Featured 1">
-                <div class="card-title">Featured Movie 1</div>
-            </div>
-            <div class="card">
-                <img src="https://via.placeholder.com/300x400.png?text=Featured+2" alt="Featured 2">
-                <div class="card-title">Featured Show 2</div>
-            </div>
+            {% for movie in coming_soon %}
+                <div class="card">
+                    {% if movie.poster %}
+                        <img src="{{ movie.poster.url }}" alt="{{ movie.title }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/180x220.png?text=No+Poster" alt="No Poster">
+                    {% endif %}
+                    <div class="details">
+                        <div class="title">{{ movie.title }}</div>
+                        <div class="description">{{ movie.description|truncatechars:70 }}</div>
+                        <div class="release"><b>Release:</b> {{ movie.release_date }}</div>
+                    </div>
+                    <div class="actions">
+                        {% if movie.trailer_url %}
+                            <a href="{{ movie.trailer_url }}" target="_blank">
+                                <button style="padding:4px 6px;">▶ Watch Trailer</button>
+                            </a>
+                        {% else %}
+                            <button style="padding:4px 6px;" disabled>No Trailer</button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p>No upcoming movies yet.</p>
+            {% endfor %}
         </div>
     </section>
 
+    <!-- Genre Filter -->
+    <div class="genre-filter">
+        <form method="get">
+            <select name="genre" onchange="this.form.submit()">
+                <option value="">All Genres</option>
+                {% for genre in genres %}
+                    <option value="{{ genre.id }}" {% if genre.id == selected_genre %}selected{% endif %}>
+                        {{ genre.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <!-- Movies Section -->
     <section class="section">
-        <div class="section-title">Trending Now</div>
+        <div class="section-title">Movies</div>
         <div class="content-row">
-            <div class="card">
-                <img src="https://via.placeholder.com/300x400.png?text=Trending+1" alt="Trending 1">
-                <div class="card-title">Trending Movie 1</div>
-            </div>
-            <div class="card">
-                <img src="https://via.placeholder.com/300x400.png?text=Trending+2" alt="Trending 2">
-                <div class="card-title">Trending Series 2</div>
-            </div>
-            <div class="card">
-                <img src="https://via.placeholder.com/300x400.png?text=Trending+3" alt="Trending 3">
-                <div class="card-title">Trending Movie 3</div>
-            </div>
+            {% for movie in movies %}
+                <div class="card">
+                    {% if movie.poster %}
+                        <img src="{{ movie.poster.url }}" alt="{{ movie.title }}">
+                    {% endif %}
+                    <div class="details">
+                        <div class="title">{{ movie.title }}</div>
+                        <div class="description">{{ movie.description|truncatechars:70 }}</div>
+                        <div class="release"><b>Release:</b> {{ movie.release_date }}</div>
+                    </div>
+                    <div class="actions">
+                        {% if movie.video %}
+                            <a href="javascript:void(0);" onclick="playVideo('m{{ movie.id }}')">
+                                <button>▶ Play</button>
+                            </a>
+                        {% endif %}
+                        <a href="{% url 'add_to_watchlist' 'movie' movie.id %}">
+                            <button>➕ Watchlist</button>
+                        </a>
+                        <div id="video-container-m{{ movie.id }}" class="video-container">
+                            <video id="video-m{{ movie.id }}" controls>
+                                <source src="{{ movie.video.url }}" type="video/mp4">
+                            </video>
+                            <div class="video-controls">
+                                <button onclick="rewind('m{{ movie.id }}')">⏪ 10s</button>
+                                <button onclick="skip('m{{ movie.id }}')">⏩ 10s</button>
+                                <button onclick="closeVideo('m{{ movie.id }}')">❌ Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No movies found for this genre.</p>
+            {% endfor %}
         </div>
     </section>
+
+    <!-- Series Section -->
+    <section class="section">
+        <div class="section-title">Series</div>
+        <div class="content-row">
+            {% for s in series %}
+                <div class="card">
+                    {% if s.poster %}
+                        <img src="{{ s.poster.url }}" alt="{{ s.title }}">
+                    {% endif %}
+                    <div class="details">
+                        <div class="title">{{ s.title }}</div>
+                    </div>
+                    <div class="actions">
+                        <a href="{% url 'series_detail' s.id %}"><button>▶ Play Series</button></a>
+                        <a href="{% url 'add_to_watchlist' 'series' s.id %}"><button>➕ Watchlist</button></a>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No series found for this genre.</p>
+            {% endfor %}
+        </div>
+    </section>
+
     <script>
+        function playVideo(id) {
+            const container = document.getElementById(`video-container-${id}`);
+            const video = document.getElementById(`video-${id}`);
+            container.style.display = "block";
+            video.play();
+            if (container.requestFullscreen) container.requestFullscreen();
+        }
+        function closeVideo(id) {
+            const container = document.getElementById(`video-container-${id}`);
+            const video = document.getElementById(`video-${id}`);
+            video.pause();
+            video.currentTime = 0;
+            if (document.fullscreenElement) document.exitFullscreen();
+            container.style.display = "none";
+        }
+        function skip(id) {
+            const video = document.getElementById(`video-${id}`);
+            if(video) video.currentTime += 10;
+        }
+        function rewind(id) {
+            const video = document.getElementById(`video-${id}`);
+            if(video) video.currentTime -= 10;
+        }
         window.addEventListener("pageshow", function(event) {
           if (event.persisted) {
             window.location.href = "{% url 'login' %}";
           }
         });
-      </script>
-      
+    </script>
 </body>
 </html>
+

@@ -9,6 +9,7 @@ urlpatterns = [
     path('movies/', include('movies.urls')),
     path('series/', include('series.urls')),
     path('watchlist/', include('watchlist.urls')),
+    path("", include("core.urls"))
 ]
 
 if settings.DEBUG:
