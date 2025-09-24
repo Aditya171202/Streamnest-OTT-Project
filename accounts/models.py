@@ -9,7 +9,7 @@ class Profile(models.Model):
     subscription_end = models.DateTimeField(default=now)
 
     def is_active_subscription(self):
-        return self.subscription_end > now()
+        return self.subscription_end and self.subscription_end > now()
 
     def __str__(self):
         return self.user.username
