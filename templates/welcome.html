@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to StreamNest</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #111; color: #fff; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: auto; background: #1c1c1c; border-radius: 10px; overflow: hidden; }
+        .header { background: #e50914; padding: 20px; text-align: center; }
+        .header h1 { margin: 0; color: #fff; }
+        .content { padding: 30px; text-align: center; }
+        .content h2 { color: #e50914; }
+        .button { display: inline-block; padding: 12px 20px; margin-top: 20px; background: #e50914; color: #fff; text-decoration: none; border-radius: 6px; font-weight: bold; }
+        .footer { background: #000; text-align: center; padding: 15px; font-size: 12px; color: #aaa; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header"><h1>StreamNest</h1></div>
+        <div class="content">
+            <h2>Welcome, {{ user.username }} 🎉</h2>
+            <p>Thanks for joining <b>StreamNest</b>, your ultimate destination for movies and series.</p>
+            <p>Your subscription is now active. Start streaming now!</p>
+            <a href="https://your-domain.com/home/" class="button">Start Watching</a>
+        </div>
+        <div class="footer">&copy; {{ current_year }} StreamNest. All rights reserved.</div>
+    </div>
+</body>
+</html>

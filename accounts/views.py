@@ -10,6 +10,9 @@ from django.conf import settings
 from django.utils.timezone import now, timedelta
 from movies.models import ComingSoon, Genre, Movie
 from series.models import Genre as SeriesGenre, Series
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 User = get_user_model()
@@ -60,7 +63,22 @@ def register(request):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
-      
+
+            subject = "Welcome to StreamNest 🎬"
+            from_email = settings.DEFAULT_FROM_EMAIL
+            to = [user.email]
+
+            text_content = f"Hi {user.username}, thank you for registering with StreamNest!"
+            html_content = render_to_string("welcome.html", { 
+                "user": user,
+                "current_year": now().year,
+                "plan": plan.capitalize()
+            })
+
+            msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+        
             request.session['new_user_id'] = user.id
             request.session['plan'] = plan
             request.session.save()
@@ -97,37 +115,43 @@ def register(request):
 
 
 
+
 @never_cache
 def user_login(request):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
         user = authenticate(username=username, password=password)
-        
+
         if user is not None:
             login(request, user)
 
+            subject = "Login Alert - StreamNest"
+            from_email = settings.DEFAULT_FROM_EMAIL
+            text_content = f"Hi {user.username}, you just logged in. If this wasn't you, reset your password immediately!"
+            html_content = render_to_string("login_alert.html", { 
+                "user": user,
+                "current_year": now().year
+            })
+
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
 
             if not hasattr(user, "profile"):
-                from .models import Profile
                 Profile.objects.create(user=user)
 
 
             if user.profile.subscription_end and user.profile.subscription_end > now():
-
                 return redirect("home")
             else:
-   
                 messages.info(request, "Your subscription has expired. Please resubscribe.")
-
-                request.session['new_user_id'] = user.id 
-   
-                request.session['plan'] = 'month'  
+                request.session['new_user_id'] = user.id
+                request.session['plan'] = 'month'
                 request.session.save()
 
                 try:
-     
-                    amount = 19900 
+                    amount = 19900
                     checkout_session = stripe.checkout.Session.create(
                         payment_method_types=['card'],
                         line_items=[{
@@ -160,9 +184,10 @@ def user_logout(request):
     return redirect("login")
 
 
+@never_cache
 def payment_success(request):
     user_id = request.session.get('new_user_id')
-    plan = request.session.get('plan', 'year')  # Default to year
+    plan = request.session.get('plan', 'year')  
 
     if user_id:
         try:
@@ -170,20 +195,35 @@ def payment_success(request):
             user.is_active = True
             user.save()
 
-            # Ensure profile exists
+
             if not hasattr(user, "profile"):
                 Profile.objects.create(user=user)
 
-            # Update subscription
+
             if plan == "month":
                 user.profile.subscription_end = now() + timedelta(days=30)
-            else:  # year
+            else:  
                 user.profile.subscription_end = now() + timedelta(days=365)
 
             user.profile.save()
             login(request, user)
 
-            # Clear session
+    
+            subject = "Subscription Activated - StreamNest 🎬"
+            from_email = settings.DEFAULT_FROM_EMAIL
+            to = [user.email]
+
+            text_content = f"Hi {user.username}, your subscription is now active!"
+            html_content = render_to_string("welcome.html", { 
+                "user": user,
+                "current_year": now().year,
+                "plan": plan.capitalize()
+            })
+
+            msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+
             request.session.pop('new_user_id', None)
             request.session.pop('plan', None)
 
@@ -197,8 +237,6 @@ def payment_success(request):
     else:
         messages.warning(request, "Your session expired. Please login again.")
         return redirect("login")
-
-
 
 def payment_failed(request):
     return render(request, "payment_failed.html")
